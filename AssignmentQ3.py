@@ -3,11 +3,10 @@ def add_path(graph, from_node, to_node, cost):
         graph[from_node] = []
     graph[from_node].append((to_node, cost))
 
-def create_bidirectional_graph(path_list):
+def create_graph(path_list):
     graph = {}
     for from_node, to_node, cost in path_list:
-        add_path(graph, from_node, to_node, cost)
-        add_path(graph, to_node, from_node, cost)  # Add the reverse path
+        add_path(graph, from_node, to_node, cost)  # Only add the direct path
     return graph
 
 def find_paths(graph, start, end, visited=None, path=None, paths=None):
@@ -42,44 +41,71 @@ def calculate_total_cost(graph, path):
                 break
     return total_cost
 
+def find_reachable_nodes(graph, start_node):
+    reachable = set()
+    def dfs(node):
+        if node not in reachable:
+            reachable.add(node)
+            for neighbor, _ in graph.get(node, []):
+                dfs(neighbor)
+    dfs(start_node)
+    return reachable
+
 def find_path_interactively(graph):
-    print("Possible locations:")
+    print("Possible starting locations:")
     print(", ".join(graph.keys()))
 
-    start_location = input("Enter the starting location: ").capitalize()
+    start_location = input("Enter the starting location (or type 'exit' to quit): ").capitalize()
+    if start_location.lower() == 'exit':
+        return
     while start_location not in graph:
         print("Invalid starting location. Please choose from the list.")
-        start_location = input("Enter the starting location: ").capitalize()
+        start_location = input("Enter the starting location (or type 'exit' to quit): ").capitalize()
+        if start_location.lower() == 'exit':
+            return
 
-    # Determine possible ending locations (ignoring the starting location)
-    possible_end_locations = set(graph.keys()) - {start_location}
+    reachable_nodes = find_reachable_nodes(graph, start_location)
+    possible_end_locations = reachable_nodes - {start_location}
+
+    if not possible_end_locations:
+        print(f"No reachable locations from {start_location}.")
+        return
+
     print("\nPossible ending locations:")
     print(", ".join(possible_end_locations))
 
-    end_location = input("Enter the ending location: ").capitalize()
+    end_location = input("Enter the ending location (or type 'exit' to quit): ").capitalize()
+    if end_location.lower() == 'exit':
+        return
     while end_location not in possible_end_locations:
         print("Invalid ending location. Please choose from the list.")
-        end_location = input("Enter the ending location: ").capitalize()
+        end_location = input("Enter the ending location (or type 'exit' to quit): ").capitalize()
+        if end_location.lower() == 'exit':
+            return
 
     paths = find_paths(graph, start_location, end_location)
     if not paths:
         print(f"No paths found from {start_location} to {end_location}.")
         return
 
-    # Sort paths first by total path length, then by cost
     paths.sort(key=lambda x: (len(x[0]), x[1]))
 
     print(f"\nOptions for paths from {start_location} to {end_location}:")
     for idx, (path, total_cost) in enumerate(paths, start=1):
         print(f"Option {idx}: {' -> '.join(path)} (Total Cost: {total_cost})")
 
-    choice = input("\nEnter the number of the path to choose, or 'stop' to end: ").strip().lower()
-    if choice == 'stop' or not choice.isdigit() or int(choice) < 1 or int(choice) > len(paths):
-        print("Invalid choice or operation stopped.")
-    else:
+    while True:
+        choice = input("\nEnter the Option number of the path to choose, or 'exit' to quit: ").strip().lower()
+        if choice == 'exit':
+            break
+        if not choice.isdigit() or int(choice) < 1 or int(choice) > len(paths):
+            print("Invalid choice. Please try again or type 'exit' to quit.")
+            continue
+
         choice = int(choice) - 1
         chosen_path, total_cost = paths[choice]
         print(f"\nChosen Path: {' -> '.join(chosen_path)}. Total cost: {total_cost}")
+        break
 
 # Path list
 path_list = [
@@ -87,9 +113,8 @@ path_list = [
     ('B', 'F', 7), ('C', 'E', 8), ('E', 'Z', 3), ('Z', 'F', 6), ('F', 'E', 4)
 ]
 
-# Create a bidirectional graph
-graph = create_bidirectional_graph(path_list)
+# Create a unidirectional graph
+graph = create_graph(path_list)
 
 # Start the interactive session
 find_path_interactively(graph)
-
