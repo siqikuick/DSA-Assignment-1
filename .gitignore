@@ -1,0 +1,61 @@
+# Ignore build artifacts and directories
+/build/
+/bin/
+/lib/
+/CMakeFiles/
+/CMakeScripts/
+/CMakeCache.txt
+/CMakeSettings.json
+
+# Ignore generated files
+/*.cmake
+/*.cbp
+/*.sln
+/*.vcxproj
+/*.vcxproj.filters
+/*.user
+
+# Ignore VS Code settings
+/.vscode/
+
+# Ignore compilation databases
+/compile_commands.json
+
+# Ignore system-specific files
+/CMakeListsUser.txt
+/CMakeUserPresets.json
+
+# Ignore package files
+/CMakeCPackConfig.cmake
+
+# Ignore Doxygen generated files
+/doc/doxygen/
+/doc/html/
+/doc/latex/
+
+# Ignore custom install directories
+/install/
+
+# Ignore editor-specific files
+*.swp
+*~
+
+# Ignore log files
+*.log
+*.pot
+*.mo
+
+# Ignore macOS metadata
+.DS_Store
+
+# Ignore Emacs backup files
+*~
+
+# Ignore temporary files
+*.tmp
+
+# Ignore user-specific files
+/CMakeUserSpecific.txt
+
+# Ignore Ninja build files
+build.ninja
