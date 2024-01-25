@@ -20,7 +20,13 @@ fi
 echo "Building the project..."
 mkdir -p build
 cd build
-cmake ..
+# check if there's a --debug flag passed
+if [ "$1" == "--debug" ]; then
+    echo "Building in debug mode..."
+    cmake -DCMAKE_BUILD_TYPE=Debug ..
+else
+    echo "Building in release mode..."
+    cmake ..
+fi
 make
-
 echo "Done!"

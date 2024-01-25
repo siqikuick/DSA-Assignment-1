@@ -1,15 +1,23 @@
 #include <stdio.h>
+#include "adt_list.h"
 
-int main() {
-    int a = 0;
+int main(int argc, char const* argv[])
+{
+    List list = adt_new();
 
-    printf("Hello World!\n");
-
-    if (a == 0) {
-        printf("a is 0\n");
+    for (int i = 0; i < 100; i++) {
+        if (adt_insert(list, i, i) == 0) {
+            printf("Inserted %d\n", i);
+        }
+        else {
+            printf("Failed to insert %d\n", i);
+        }
     }
-    else {
-        printf("a is not 0\n");
+
+    printf("List size: %d\n", list.size);
+
+    for (Node* node = list.head; node != NULL; node = node->next) {
+        printf("%d\n", node->data);
     }
 
     return 0;

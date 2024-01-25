@@ -15,6 +15,8 @@ cmake_minimum_required(VERSION 3.16...3.22)
 set (PROJECT_NAME testing)
 project(${PROJECT_NAME} VERSION 0.1.0 LANGUAGES C)
 
-set (SOURCES src/main.c)
+set (SOURCES 
+    src/main.c
+    src/adt_list.c)
 
 add_executable(${PROJECT_NAME} ${SOURCES})

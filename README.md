@@ -10,6 +10,24 @@ why your implementation has achieved the stated time complexity requirements.
 
 ## Question breakdown
 
+### Data Structure
+
+Singly linked list (store actual data within the nodes)
+
+### Operations
+
+    get(i): Retrieve element at position i (O(1) time)
+    insert(i, element): Insert element at position i (O(1) time)
+    remove(i): Remove element at position i (O(1) time)
+
+### Additional data structures
+
+Indexed Lookup Table
+
+    Maintain a separate hash table mapping positions to node addresses.
+    Update the linked list and hash table simultaneously during insert/remove.
+    Access nodes directly through hash table keys (positions) for O(1) get(i).
+
 ## Building and running
 
 ### The simple way
@@ -19,6 +37,8 @@ Just run the `build.sh` (Linux) or `build.ps1` (Windows, **untested**) script in
 ```bash
     chmod u+x ./build #if the script does not have execute permissions
     ./build.sh
+    # or
+    ./build.sh --debug #for debug build
 ```
 
 ### The manual way

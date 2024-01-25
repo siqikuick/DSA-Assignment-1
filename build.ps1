@@ -18,7 +18,12 @@ Write-Host "Building the project..."
 New-Item -Path "build" -ItemType Directory -Force
 Set-Location "build"
 
-cmake ..
+# Check if debug flag is passed
+if ($args[0] -eq "-d") {
+    cmake -DCMAKE_BUILD_TYPE=Debug ..
+else
+    cmake ..
+}
 make
 
 Write-Host "Done!"
