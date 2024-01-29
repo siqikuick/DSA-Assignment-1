@@ -17,7 +17,7 @@ int main(int argc, char const* argv[])
     printf("List size: %d\n", list.size);
 
     for (Node* node = list.head; node != NULL; node = node->next) {
-        printf("%d\n", node->data);
+        printf("%d->", node->data);
     }
 
     return 0;

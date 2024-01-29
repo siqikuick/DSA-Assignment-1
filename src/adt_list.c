@@ -31,23 +31,36 @@ int adt_insert(List list, int position, int data)
         // Use tail pointers
         int sublistIndex = position / MAX_SIZE;
         Node* currentTail = list.tailPointers[sublistIndex];
+        // Create a new node, insert it between currentTail and its next node.
+        Node* node = (Node*)malloc(sizeof(Node));
+        node->data = data;
 
         // Iterate through the remaining position % MAX_SIZE nodes
         // Update currentTail to its next pointer until the desired position is reached.
         for (int i = 0; i < position % MAX_SIZE; i++) {
-            currentTail = currentTail->next;
+            if (currentTail->next == NULL) {
+                // If the next pointer is NULL, then we have reached the end of the list.
+                // Insert the node at the end of the list.
+                currentTail->next = node;
+                list.tail = node;
+                list.size++;
+
+                list.tailPointers[sublistIndex] = node;
+
+                return 0;
+            }
+            else {
+                currentTail = currentTail->next;
+            }
         }
 
-        // Create a new node, insert it between currentTail and its next node.
-        Node* node = (Node*)malloc(sizeof(Node));
-        node->data = data;
-        node->next = currentTail->next; // TO FIX: Segfault here
-        currentTail->next = node;
+        // node->next = currentTail->next; // TO FIX: Segfault here
+        // currentTail->next = node;
 
-        // Update the tail pointer for the sublist.
-        list.tailPointers[sublistIndex] = node;
+        // // Update the tail pointer for the sublist.
+        // list.tailPointers[sublistIndex] = node;
 
-        list.size++;
+        // list.size++;
 
         return 0;
     }
