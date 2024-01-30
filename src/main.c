@@ -1,24 +1,17 @@
 #include <stdio.h>
 #include "adt_list.h"
+#include "hashtable.h"
 
 int main(int argc, char const* argv[])
 {
-    List list = adt_new();
+    List* list = adt_new();
 
-    for (int i = 0; i < 100; i++) {
-        if (adt_insert(list, i, i) == 0) {
-            printf("Inserted %d\n", i);
-        }
-        else {
-            printf("Failed to insert %d\n", i);
-        }
-    }
+    adt_insert(list, 0, 1);
+    adt_insert(list, 1, 2);
+    adt_insert(list, 2, 3);
+    adt_insert(list, 1, 4);
 
-    printf("List size: %d\n", list.size);
-
-    for (Node* node = list.head; node != NULL; node = node->next) {
-        printf("%d->", node->data);
-    }
+    adt_print(list);
 
     return 0;
 }

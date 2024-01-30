@@ -1,77 +1,67 @@
-#include "adt_list.h"
 #include <stdio.h>
 #include <stdlib.h>
 
-List adt_new()
-{
-    List list;
-    list.head = (Node*)malloc(sizeof(Node));
-    list.head->data = LIST_NULL;
-    list.head->next = NULL;
-    list.tail = list.head;
-    list.size = 0;
-    list.tailPointers[0] = list.head;
+#include "adt_list.h"
+
+List* adt_new() {
+    List* list = malloc(sizeof(List));
+    list->size = 0;
+    list->head = NULL;
+    list->index_table = create_hash_table();
 
     return list;
 }
 
-int adt_insert(List list, int position, int data)
-{
-    if (position == 0) {
-        // Use head pointers
-        Node* node = (Node*)malloc(sizeof(Node));
-        node->next = list.head;
-        node->data = data;
-        list.head = node;
-        list.size++;
+int adt_insert(List* list, int index, int data) {
+    Node* node = malloc(sizeof(Node*));
+    node->data = data;
+    node->next = NULL;
 
-        return 0;
+    // Check if the index already exists in the hashtable
+    if (hash_lookup(list->index_table, index) != NULL) {
+        printf("Error: Index already exists in the list.\n");
+        return -1;
+    }
+
+    // Insert the node at the specified index
+    if (index == 0) {
+        node->next = list->head;
+        list->head = node;
     }
     else {
-        // Use tail pointers
-        int sublistIndex = position / MAX_SIZE;
-        Node* currentTail = list.tailPointers[sublistIndex];
-        // Create a new node, insert it between currentTail and its next node.
-        Node* node = (Node*)malloc(sizeof(Node));
-        node->data = data;
-
-        // Iterate through the remaining position % MAX_SIZE nodes
-        // Update currentTail to its next pointer until the desired position is reached.
-        for (int i = 0; i < position % MAX_SIZE; i++) {
-            if (currentTail->next == NULL) {
-                // If the next pointer is NULL, then we have reached the end of the list.
-                // Insert the node at the end of the list.
-                currentTail->next = node;
-                list.tail = node;
-                list.size++;
-
-                list.tailPointers[sublistIndex] = node;
-
-                return 0;
-            }
-            else {
-                currentTail = currentTail->next;
-            }
+        Node* prev = hash_lookup(list->index_table, index - 1);
+        if (prev == NULL) {
+            printf("Error: Invalid index.\n");
+            return -1;
         }
-
-        // node->next = currentTail->next; // TO FIX: Segfault here
-        // currentTail->next = node;
-
-        // // Update the tail pointer for the sublist.
-        // list.tailPointers[sublistIndex] = node;
-
-        // list.size++;
-
-        return 0;
+        node->next = prev->next;
+        prev->next = node;
     }
+
+    // Update the hashtable with the new index
+    insert_hash(list->index_table, index, node);
+
+    list->size++;
+    return 0;
 }
 
-int adt_remove(List list, int index)
+int adt_remove(List* list, int index)
 {
     return 0;
 }
 
-int adt_get(List list, int index)
+int adt_get(List* list, int index)
 {
     return 0;
+}
+
+void adt_print(List* list)
+{
+    Node* current = list->head;
+    while (current != NULL) {
+        printf("%d\n", current->data);
+        current = current->next;
+    }
+
+    printf("Size: %d\n", list->size);
 }
