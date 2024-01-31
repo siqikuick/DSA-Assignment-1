@@ -5,7 +5,7 @@
 
 HashTable* create_hash_table()
 {
-    HashTable* table = malloc(sizeof(HashTable));
+    HashTable* table = malloc(sizeof(HashTable)); // Allocate memory for the table
     table->size = 0;
     table->table = malloc(sizeof(Node*) * MAX_SIZE);
     return table;
@@ -13,14 +13,14 @@ HashTable* create_hash_table()
 
 void insert_hash(HashTable* table, int key, Node* value)
 {
-    int index = key % MAX_SIZE;
+    int index = key % MAX_SIZE; // Get the index of the key, mod max size to prevent overflow
     table->table[index] = value;
     table->size++;
 }
 
 Node* hash_lookup(HashTable* table, int key)
 {
-    int index = key % MAX_SIZE;
+    int index = key % MAX_SIZE; // Get the index of the key, mod max size to prevent overflow
     if (table->table[index] == NULL) {
         return NULL;
     }
@@ -29,7 +29,7 @@ Node* hash_lookup(HashTable* table, int key)
 
 void remove_hash(HashTable* table, int key)
 {
-    int index = key % MAX_SIZE;
+    int index = key % MAX_SIZE; // Get the index of the key, mod max size to prevent overflow
     table->table[index] = NULL;
     table->size--;
 }
