@@ -1,7 +1,9 @@
 # DSA-Assignment-1
 
 This one is a confusing one. I'm not sure if I've done it properly, because I can't exactly achieve `O(1)` time for the `insert` and `remove` operations. I'm gonna try to explain why here.
-From what I understand, a singly-linked list cannot achieve `O(1)` time for `insert` and `remove` operations, because you have to traverse the list to find the node before the one you want to insert or remove. This is `O(n)` time complexity, where `n` is the number of elements in the list.
+From what I understand, a singly-linked list cannot achieve `O(1)` time for `insert` and `remove` operations, because inserting or removing an element at a specific position requires traversing the list to find the node at that position.
+
+However, inserting at the head or tail of the list is O(1) time complexity, because we can directly access the head or tail node and insert the new node there.
 
 E.g:
 If I want to insert an element at position `i`<br>
@@ -16,11 +18,11 @@ element = 42
 
 [1, 2, 42, 3, 4, 5] Like this
 
-I can split the list at position 2, and insert the new node in between
+I can split the list at position 2, however this requires traversing the list to find the node at position 2, which is O(n) time complexity
 
 [1, 2] -> [42] -> [3, 4, 5]
-
-However merging the list back together is also O(n) time complexity from what I understand for a singly linked list, to achieve O(1) time, I would have to use a doubly linked list.
+    ^
+    Splitting at this point requires traversing the list to find the node at position 2
 
 ```
 
