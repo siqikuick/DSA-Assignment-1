@@ -2,20 +2,10 @@
 #define HASHTABLE_H
 #define MAX_SIZE 100
 
-typedef struct node {
-    int data;
-    struct node* next;
-} Node;
-
-typedef struct {
-    int size;
-    Node** table;
-} HashTable;
+#include "nodes.h"
 
 /**
  * @brief Creates a new hash table.
- *
- * @return A pointer to the newly created hash table.
  */
 HashTable* create_hash_table();
 
@@ -26,25 +16,36 @@ HashTable* create_hash_table();
  * @param key The key of the pair.
  * @param value The value of the pair.
  */
-void insert_hash(HashTable* table, int key, Node* value);
+void hash_insert(HashTable* table, int key, ListNode* value);
 
 /**
- * @brief Looks up a value in the hash table based on the given key.
+ * @brief Retrieves the value associated with the given key from the hash table.
  *
  * @param table The hash table to search in.
  * @param key The key to search for.
  * @return A pointer to the value associated with the key, or NULL if not found.
  */
-Node* hash_lookup(HashTable* table, int key);
+ListNode* hash_get(HashTable* table, int key);
 
 /**
- * @brief Removes a key-value pair from the hash table based on the given key.
+ * @brief Deletes the key-value pair with the given key from the hash table.
  *
- * @param table The hash table to remove from.
- * @param key The key of the pair to remove.
+ * @param table The hash table to delete from.
+ * @param key The key of the pair to delete.
  */
-void remove_hash(HashTable* table, int key);
+void hash_delete(HashTable* table, int key);
 
+/**
+ * @brief Destroys the hash table and frees the allocated memory.
+ *
+ * @param table The hash table to destroy.
+ */
 void destroy_hash_table(HashTable* table);
 
+/**
+ * @brief Prints the contents of the hash table.
+ *
+ * @param table The hash table to print.
+ */
+void _print_hash_table(HashTable* table);
 #endif

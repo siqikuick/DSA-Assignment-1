@@ -2,135 +2,128 @@
 #include <stdlib.h>
 
 #include "adt_list.h"
+#include "hashtable.h"
 
 List* adt_new() {
-    List* list = malloc(sizeof(List));
-    list->size = 0;
+    List* list = (List*)malloc(sizeof(List));
     list->head = NULL;
-    list->index_table = create_hash_table();
+    list->size = 0;
+    list->table = create_hash_table();
 
     return list;
 }
 
-int adt_insert(List* list, int index, int data) {
-    Node* node = malloc(sizeof(Node*));
-    node->data = data;
-    node->next = NULL;
-
-    // Check if the list is empty and the index is > 0
-    if (list->size < index || index < 0) {
-        printf("Error: Invalid index.\n");
-        return LIST_INDEX_INVALID;
-    }
-
-    // Check if the index is valid
-    if (index < 0 || index > list->size) {
-        printf("Error: Invalid index.\n");
-        return LIST_INDEX_INVALID;
-    }
-
-    // If the list is empty
+ListNode* adt_append(List* list, int value) {
+    ListNode* new_node = (ListNode*)malloc(sizeof(ListNode));
+    new_node->value = value;
+    new_node->next = list->head;
     if (list->size == 0) {
-        list->head = node;
+        new_node->position = 0; // Set position to 0
     }
     else {
-        Node* prev = hash_lookup(list->index_table, index - 1);
-        node->next = prev->next;
-        prev->next = node;
+        new_node->position = list->head->position + 1; // Increment position by 1
     }
 
-    // Update the hashtable
-    insert_hash(list->index_table, index, node);
-    // Update the index of the nodes after the inserted node, I can't really think
-    // of a way to do this without iterating through the list, so this is O(n)
-    Node* current = node->next;
-    while (current != NULL) {
-        remove_hash(list->index_table, index + 1);
-        insert_hash(list->index_table, index + 1, current);
-        current = current->next; // Move to the next node
-        index++;
-    }
+    list->head = new_node;
+
+    hash_insert(list->table, new_node->position + new_node->value, new_node);
 
     list->size++;
 
-    return LIST_SUCCESS;
+    return new_node;
 }
 
-int adt_remove(List* list, int index)
-{
-    if (list->size == 0) {
-        printf("Error: List is empty.\n");
-        return LIST_NULL;
+ListNode* adt_insert_after(List* list, ListNode* node, int value) {
+    if (list->head == NULL || list->size == 0) {
+        printf("List is empty\n");
+        return NULL;
     }
 
-    if (hash_lookup(list->index_table, index) == NULL) {
-        printf("Error: Invalid index.\n");
-        return LIST_INDEX_INVALID;
+    if (node == NULL) {
+        printf("Node is NULL\n");
+        return NULL;
     }
 
-    Node* node = hash_lookup(list->index_table, index); // The node to remove
-    Node* prev = hash_lookup(list->index_table, index - 1); // The node before the node to remove
+    ListNode* new_node = (ListNode*)malloc(sizeof(ListNode));
+    new_node->value = value;
+    new_node->next = node->next;
+    new_node->position = node->position + 1; // Increment the position by 1
 
-    Node* temp = node->next;
+    node->next = new_node;
 
-    // If the node to remove is the head
-    if (index == 0) {
-        list->head = temp;
-    }
-    else {
-        prev->next = temp;
-    }
+    hash_insert(list->table, new_node->position + new_node->value, new_node);
 
-    // Update the hashtable
-    remove_hash(list->index_table, index);
-    // Free the node
-    free(node);
-    // Update the index of the nodes after the removed node, I can't really think
-    // of a way to do this without iterating through the list, so this is O(n)
-    Node* current = temp;
-    while (current != NULL) {
-        remove_hash(list->index_table, index + 1);
-        insert_hash(list->index_table, index, current);
-        current = current->next; // Move to the next node
-        index++;
+    list->size++;
+
+    return new_node;
+}
+
+void adt_remove(List* list, int position) {
+    if (list->head == NULL) {
+        printf("List is empty\n");
+        return;
     }
 
+    if (position == 0) {
+        ListNode* temp = list->head;
+        list->head = list->head->next;
+        hash_delete(list->table, temp->position + temp->value);
+        free(temp);
+        list->size--;
+        return;
+    }
+
+    ListNode* current = list->head;
+    printf("current->position: %d\n", current->position);
+    for (int i = 0; current != NULL && i < position - 1; i++) {
+        current = current->next;
+    }
+
+    if (current == NULL || current->next == NULL) {
+        printf("Position not found\n");
+        return;
+    }
+
+    ListNode* temp = current->next;
+    current->next = temp->next;
+    hash_delete(list->table, temp->position + temp->value);
+    free(temp);
     list->size--;
-
-    return LIST_SUCCESS;
 }
 
-int adt_get(List* list, int index)
-{
-    if (list->size == 0) {
-        printf("Error: List is empty.\n");
-        return LIST_NULL;
+ListNode* adt_get(List* list, int position, int value) {
+    int key = position + value;
+
+    if (list->table == NULL) {
+        printf("Table is NULL\n");
+        return NULL;
     }
 
-    if (hash_lookup(list->index_table, index) == NULL) {
-        printf("Error: Index here is NULL.\n");
-        return LIST_NULL;
+    ListNode* node = hash_get(list->table, key);
+    if (node == NULL) {
+        printf("Node is NULL\n");
+        return NULL;
     }
-    return hash_lookup(list->index_table, index)->data;
+
+    return node;
 }
 
-void adt_print(List* list)
-{
-    for (int i = 0; i < list->size; i++) {
-        printf("[Element at %d] %d\n", i, adt_get(list, i));
-    }
-    printf("\nList size: %d\n\n", list->size);
-}
-
-void adt_destroy(List* list)
-{
-    Node* current = list->head;
-    Node* next;
+void adt_print(List* list) {
+    ListNode* current = list->head;
     while (current != NULL) {
-        next = current->next;
+        printf("%d ", current->value);
+        current = current->next;
+    }
+    printf("\n");
+}
+
+void adt_destroy(List* list) {
+    ListNode* current = list->head;
+    while (current != NULL) {
+        ListNode* next = current->next;
         free(current);
         current = next;
     }
-    destroy_hash_table(list->index_table);
+    destroy_hash_table(list->table);
     free(list);
 }

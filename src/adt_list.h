@@ -1,57 +1,56 @@
 #ifndef ADT_LIST_H
 #define ADT_LIST_H
 
-#include "hashtable.h"
-
-#define LIST_NULL ((int) -1)
-#define LIST_INDEX_INVALID ((int) -2)
-#define LIST_SUCCESS ((int) 0)
-// #define MAX_SIZE 100
-
-// typedef struct node {
-//     int data;
-//     struct node* next;
-// } Node;
-
-typedef struct {
-    Node* head;
-    int size;
-    HashTable* index_table;
-} List;
+#include "nodes.h"
 
 /**
- * Create a new list
- * @return the new list
+ * @brief Initialize a new list
 */
 List* adt_new();
 
 /**
- * Retrieve element at position i (O(1) time)
- * @param list the list to retrieve from
- * @param index the index to retrieve from
- * @return the element at position i
+ * @brief Append a new node to the list
+ *
+ * @param list The list to append the node to
+ * @param value The value of the new node
 */
-int adt_get(List* list, int index);
+ListNode* adt_append(List* list, int value);
 
 /**
- * Insert element at position i (O(1) time)
- * @param list the list to insert into
- * @param index the position to insert at
- * @param data the data to insert
- * @return 0 if successful, -1 if not
+ * @brief Insert a new node after a given node
+ *
+ * @param list The list to insert the node into
+ * @param node The node to insert the new node after
+ * @param value The value of the new node
+ * @return The new node that was inserted
 */
-int adt_insert(List* list, int index, int data);
+ListNode* adt_insert_after(List* list, ListNode* node, int value);
+
+void adt_remove(List* list, int position);
 
 /**
- * Remove element at position i (O(1) time)
- * @param list the list to remove from
- * @param index the index to remove from
- * @return 0 if successful, -1 if not
+ * @brief Get a node from the list based on its position and value.
+ * Position does not start from 0, it starts from 1
+ *
+ * @param list The list to get the node from
+ * @param position The position of the node
+ * @param value The value of the node
+ * @return The node that was found
 */
-int adt_remove(List* list, int index);
+ListNode* adt_get(List* list, int position, int value);
 
+/**
+ * @brief Print the list
+ *
+ * @param list The list to print
+*/
 void adt_print(List* list);
 
+/**
+ * @brief Destroy the list
+ *
+ * @param list The list to destroy
+*/
 void adt_destroy(List* list);
 
 #endif
