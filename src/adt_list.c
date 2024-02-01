@@ -17,10 +17,16 @@ int adt_insert(List* list, int index, int data) {
     node->data = data;
     node->next = NULL;
 
+    // Check if the list is empty and the index is > 0
+    if (list->size < index || index < 0) {
+        printf("Error: Invalid index.\n");
+        return LIST_INDEX_INVALID;
+    }
+
     // Check if the index is valid
     if (index < 0 || index > list->size) {
         printf("Error: Invalid index.\n");
-        return -1;
+        return LIST_INDEX_INVALID;
     }
 
     // If the list is empty
@@ -47,14 +53,19 @@ int adt_insert(List* list, int index, int data) {
 
     list->size++;
 
-    return 0;
+    return LIST_SUCCESS;
 }
 
 int adt_remove(List* list, int index)
 {
+    if (list->size == 0) {
+        printf("Error: List is empty.\n");
+        return LIST_NULL;
+    }
+
     if (hash_lookup(list->index_table, index) == NULL) {
         printf("Error: Invalid index.\n");
-        return -1;
+        return LIST_INDEX_INVALID;
     }
 
     Node* node = hash_lookup(list->index_table, index); // The node to remove
@@ -86,11 +97,16 @@ int adt_remove(List* list, int index)
 
     list->size--;
 
-    return 0;
+    return LIST_SUCCESS;
 }
 
 int adt_get(List* list, int index)
 {
+    if (list->size == 0) {
+        printf("Error: List is empty.\n");
+        return LIST_NULL;
+    }
+
     if (hash_lookup(list->index_table, index) == NULL) {
         printf("Error: Index here is NULL.\n");
         return LIST_NULL;

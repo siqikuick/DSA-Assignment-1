@@ -36,5 +36,21 @@ int main(int argc, char const* argv[])
 
     adt_destroy(list);
 
+    List* list2 = adt_new();
+
+    printf("\nEmpty list test:\n"); // Desired output: Size: 0
+
+    adt_print(list2);
+
+    printf("\nEmpty removal test:\n"); // Desired output: Error: Invalid index.
+
+    adt_remove(list2, 0);
+
+    printf("\nEmpty injection test:\n"); // Desired output: Error: Invalid index.
+
+    adt_insert(list2, 4, 1);
+
+    adt_destroy(list2);
+
     return 0;
 }

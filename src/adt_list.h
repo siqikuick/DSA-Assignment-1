@@ -4,6 +4,8 @@
 #include "hashtable.h"
 
 #define LIST_NULL ((int) -1)
+#define LIST_INDEX_INVALID ((int) -2)
+#define LIST_SUCCESS ((int) 0)
 // #define MAX_SIZE 100
 
 // typedef struct node {
