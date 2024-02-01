@@ -17,19 +17,8 @@ class Flights:
         self.arrival = arrival
 
 
-flights = {"f001": {
-        "confirmed": [("John Doe", "123456789", "1990-01-01", "Gold")],
-        "Waiting": []
-
-    }, "f002": {
-        "confirmed": [("John Doe", "123456789", "1990-01-01", "Gold")],
-        "Waiting": []
-    }, "f003": {
-        "confirmed": [("John Doe", "123456789", "1990-01-01", "Gold"), ("John Doe", "123456789", "1990-01-01", "Gold")],
-        "Waiting": []
-    }
-}
-flight_info = [["f001", 2, "Singapore", "Korea"], ["f002", 2, "Singapore", "Korea"], ["f003", 2, "Singapore", "Korea"]]
+flights = {}
+flight_info = []
 
 
 def sort_waiting_list(waiting_list):
