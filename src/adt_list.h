@@ -50,4 +50,6 @@ int adt_remove(List* list, int index);
 
 void adt_print(List* list);
 
+void adt_destroy(List* list);
+
 #endif

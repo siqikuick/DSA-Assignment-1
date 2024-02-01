@@ -1,5 +1,29 @@
 # DSA-Assignment-1
 
+This one is a confusing one. I'm not sure if I've done it properly, because I can't exactly achieve `O(1)` time for the `insert` and `remove` operations. I'm gonna try to explain why here.
+From what I understand, a singly-linked list cannot achieve `O(1)` time for `insert` and `remove` operations, because you have to traverse the list to find the node before the one you want to insert or remove. This is `O(n)` time complexity, where `n` is the number of elements in the list.
+
+E.g:
+If I want to insert an element at position `i`<br>
+
+```
+linkedList = [1, 2, 3, 4, 5]
+element = 42
+
+# I want to insert 42 at position 3
+# I have to traverse the list to find the node at position 2
+# Then I can insert the new node at position 3
+
+[1, 2, 42, 3, 4, 5] Like this
+
+I can split the list at position 2, and insert the new node in between
+
+[1, 2] -> [42] -> [3, 4, 5]
+
+However merging the list back together is also O(n) time complexity from what I understand for a singly linked list, to achieve O(1) time, I would have to use a doubly linked list.
+
+```
+
 ## Question 2
 
 Write a singly linked list ADT implementation that achieves `O(1)` time for insertion and removals at

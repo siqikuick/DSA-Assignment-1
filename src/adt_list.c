@@ -17,46 +17,36 @@ int adt_insert(List* list, int index, int data) {
     node->data = data;
     node->next = NULL;
 
-    // Check if the index already exists in the hashtable
-    if (hash_lookup(list->index_table, index) != NULL) {
-        // If it does, split the list at that index and insert the node
-        Node* prev = hash_lookup(list->index_table, index - 1);
-        // Cautionary check
-        if (prev == NULL) {
-            printf("Error: Invalid index.\n");
-            return -1;
-        }
-        else {
-            node->next = prev->next; // Move back the pointer of the node at the index
-            prev->next = node; // Set the pointer of the node before the index to the new node
-
-            // Update the hashtable with the new index
-            insert_hash(list->index_table, index, node);
-
-            list->size++;
-            return 0;
-        }
+    // Check if the index is valid
+    if (index < 0 || index > list->size) {
+        printf("Error: Invalid index.\n");
+        return -1;
     }
 
-    // Insert the node at the specified index
-    if (index == 0) { // If the index is 0, set the head to the new node
-        node->next = list->head;
+    // If the list is empty
+    if (list->size == 0) {
         list->head = node;
     }
     else {
         Node* prev = hash_lookup(list->index_table, index - 1);
-        if (prev == NULL) {
-            printf("Error: Invalid index.\n");
-            return -1;
-        }
-        node->next = prev->next; // Move back the pointer of the node at the index
-        prev->next = node; // Set the pointer of the node before the index to the new node
+        node->next = prev->next;
+        prev->next = node;
     }
 
-    // Update the hashtable with the new index
+    // Update the hashtable
     insert_hash(list->index_table, index, node);
+    // Update the index of the nodes after the inserted node, I can't really think
+    // of a way to do this without iterating through the list, so this is O(n)
+    Node* current = node->next;
+    while (current != NULL) {
+        remove_hash(list->index_table, index + 1);
+        insert_hash(list->index_table, index + 1, current);
+        current = current->next; // Move to the next node
+        index++;
+    }
 
     list->size++;
+
     return 0;
 }
 
@@ -114,4 +104,17 @@ void adt_print(List* list)
         printf("[Element at %d] %d\n", i, adt_get(list, i));
     }
     printf("\nList size: %d\n\n", list->size);
+}
+
+void adt_destroy(List* list)
+{
+    Node* current = list->head;
+    Node* next;
+    while (current != NULL) {
+        next = current->next;
+        free(current);
+        current = next;
+    }
+    destroy_hash_table(list->index_table);
+    free(list);
 }

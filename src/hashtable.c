@@ -32,4 +32,11 @@ void remove_hash(HashTable* table, int key)
     int index = key % MAX_SIZE; // Get the index of the key, mod max size to prevent overflow
     table->table[index] = NULL;
     table->size--;
+    free(table->table[index]);
+}
+
+void destroy_hash_table(HashTable* table)
+{
+    free(table->table);
+    free(table);
 }

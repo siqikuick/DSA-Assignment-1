@@ -34,5 +34,7 @@ int main(int argc, char const* argv[])
 
     adt_print(list);
 
+    adt_destroy(list);
+
     return 0;
 }

@@ -45,4 +45,6 @@ Node* hash_lookup(HashTable* table, int key);
  */
 void remove_hash(HashTable* table, int key);
 
+void destroy_hash_table(HashTable* table);
+
 #endif
