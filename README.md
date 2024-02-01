@@ -65,6 +65,8 @@ Just run the `build.sh` (Linux) or `build.ps1` (Windows, **untested**) script in
     ./build.sh
     # or
     ./build.sh --debug #for debug build
+
+    ./build/testing #run the file
 ```
 
 ### The manual way
@@ -78,6 +80,8 @@ Ensure you have `cmake` installed and run the following commands, should be the 
     cd build
     cmake ..
     make
+
+    ./testing
 ```
 
 The executable will be generated in the `build` directory.
