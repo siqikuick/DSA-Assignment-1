@@ -101,11 +101,17 @@ def modify_path_list(path_list):
             else:
                 path_list.append(new_path)
         elif action == 'delete':
-            idx_to_delete = int(input("Enter the index of the path you want to delete: "))
-            if 1 <= idx_to_delete <= len(path_list):
-                del path_list[idx_to_delete - 1]
-            else:
-                print("Invalid index. Please try again.")
+            while True:
+                try:
+                    idx_to_delete = int(input("Enter the index of the path you want to delete: "))
+                    if 1 <= idx_to_delete <= len(path_list):
+                        del path_list[idx_to_delete - 1]
+                        break
+                    else:
+                        print("Index out of range. Please try again.")
+        
+                except:
+                    print("Invalid index. Please try again.")
         elif action.isdigit():
             idx = int(action)
             if 1 <= idx <= len(path_list):
