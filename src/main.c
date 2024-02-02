@@ -6,35 +6,25 @@ int main(int argc, char const* argv[])
 {
     List* list = adt_new();
 
-    // Append 10 nodes to the list
-    for (int i = 0; i < 10; i++) {
-        adt_append(list, i);
-    }
+    // Append elements to the list
+    adt_append(list, 10);
+    adt_append(list, 20);
+    adt_append(list, 30);
 
-    printf("List after appending 10 nodes:\n"); // Desired output: 9 8 7 6 5 4 3 2 1 0
-    adt_print(list);
+    // Insert an element after the second node
+    ListNode* node = adt_get(list, 1, 20);
+    adt_insert_after(list, node, 25);
 
-    // printf("== Debug Hash Table ==\n");
-    // _print_hash_table(list->table);
+    // Print the list
+    adt_print(list); // Expected output: 30 25 20 10
 
-    // Insert a new node after the 3rd node
-    adt_insert_after(list, adt_get(list, 3, 3), 48);
+    // Remove the second node
+    adt_remove(list, 1);
 
-    printf("List after inserting a new node after the 3rd node:\n"); // Desired output: 9 8 7 100 6 5 4 3 2 1 0
-    adt_print(list);
+    // Print the list again
+    adt_print(list); // Expected output: 30 20 10
 
-    // printf("== Debug Hash Table ==\n");
-    // _print_hash_table(list->table);
-
-    // Remove the 6th node
-    adt_remove(list, 6);
-
-    printf("List after removing the 6th node:\n"); // Desired output: 9 8 7 100 6 4 3 2 1 0
-    adt_print(list);
-
-    // printf("== Debug Hash Table ==\n");
-    // _print_hash_table(list->table);
-
+    // Destroy the list
     adt_destroy(list);
 
     return 0;
