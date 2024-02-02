@@ -48,5 +48,7 @@ int main(int argc, char const* argv[])
 
     adt_destroy(edge_list);
 
+    printf("Test complete...\n");
+
     return 0;
 }

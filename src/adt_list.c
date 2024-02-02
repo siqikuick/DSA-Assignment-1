@@ -47,7 +47,8 @@ ListNode* adt_insert_after(List* list, ListNode* node, int value) {
     ListNode* new_node = (ListNode*)malloc(sizeof(ListNode));
     new_node->value = value;
     new_node->next = node->next;
-    new_node->position = node->position + 1; // Increment the position by 1
+    new_node->position = node->position + 1; // Increment the position by 1 using the old position
+    // drawback of this approach is that subsequent nodes are not updated without iterating through the list
 
     node->next = new_node;
 
@@ -68,13 +69,11 @@ void adt_remove(List* list, int position) {
         ListNode* temp = list->head;
         list->head = list->head->next;
         hash_delete(list->table, temp->position + temp->value);
-        free(temp);
         list->size--;
         return;
     }
 
     ListNode* current = list->head;
-    printf("current->position: %d\n", current->position);
     for (int i = 0; current != NULL && i < position - 1; i++) {
         current = current->next;
     }
@@ -84,10 +83,8 @@ void adt_remove(List* list, int position) {
         return;
     }
 
-    ListNode* temp = current->next;
-    current->next = temp->next;
-    hash_delete(list->table, temp->position + temp->value);
-    free(temp);
+    hash_delete(list->table, current->position + current->value);
+    current->next = current->next->next;
     list->size--;
 }
 
@@ -101,7 +98,6 @@ ListNode* adt_get(List* list, int position, int value) {
 
     ListNode* node = hash_get(list->table, key);
     if (node == NULL) {
-        printf("Node is NULL\n");
         return NULL;
     }
 
@@ -114,6 +110,16 @@ void adt_print(List* list) {
         printf("%d ", current->value);
         current = current->next;
     }
+
+    printf("\nNode positions:\n");
+
+    for (int i = 0; i < MAX_SIZE; i++) {
+        ListNode* node = adt_get(list, i, 0);
+        if (node != NULL) {
+            printf("Node at position %d: %d\n", node->position, node->value);
+        }
+    }
+
     printf("\n");
 }
 

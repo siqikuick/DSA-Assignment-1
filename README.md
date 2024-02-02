@@ -1,30 +1,6 @@
 # DSA-Assignment-1
 
-This one is a confusing one. I'm not sure if I've done it properly, because I can't exactly achieve `O(1)` time for the `insert` and `remove` operations. I'm gonna try to explain why here.
-From what I understand, a singly-linked list cannot achieve `O(1)` time for `insert` and `remove` operations, because inserting or removing an element at a specific position requires traversing the list to find the node at that position.
-
-However, inserting at the head or tail of the list is O(1) time complexity, because we can directly access the head or tail node and insert the new node there.
-
-E.g:
-If I want to insert an element at position `i`<br>
-
-```
-linkedList = [1, 2, 3, 4, 5]
-element = 42
-
-# I want to insert 42 at position 3
-# I have to traverse the list to find the node at position 2
-# Then I can insert the new node at position 3
-
-[1, 2, 42, 3, 4, 5] Like this
-
-I can split the list at position 2, however this requires traversing the list to find the node at position 2, which is O(n) time complexity
-
-[1, 2] -> [42] -> [3, 4, 5]
-    ^
-    Splitting at this point requires traversing the list to find the node at position 2
-
-```
+![man...](https://cdn.discordapp.com/attachments/713308973511737346/1035068861017497630/unknown.png?ex=65cda6ff&is=65bb31ff&hm=84449c1eaedc0b4d135b20cb91d7962dcdea7295bd44f8c98745be0b34c22f31&)
 
 ## Question 2
 
