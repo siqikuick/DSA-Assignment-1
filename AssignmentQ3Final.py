@@ -109,7 +109,6 @@ def modify_path_list(path_list):
                         break
                     else:
                         print("Index out of range. Please try again.")
-        
                 except:
                     print("Invalid index. Please try again.")
         elif action.isdigit():
