@@ -17,13 +17,21 @@ class Flights:
         self.arrival = arrival
 
 
-flights = {}
-flight_info = []
+flights = {"f001": {
+        "confirmed": [("john doe", "123456789", "1990-01-01", "gold")],
+        "waiting": [("non-member",("alice smith", "123456789", "1990-01-01", "non-member")), ("silver",("jane doe", "987654321", "1995-05-05", "silver")), ("gold",("tom doe", "123456789", "1990-01-01", "gold")),
+                    ("gold",("henry doe", "123456789", "1990-01-01", "gold"))]
+
+    }, "f002": {
+        "confirmed": [("john Doe", "123456789", "1990-01-01", "gold")],
+        "waiting": []
+    }}
+flight_info = [["f001", 2, "Singapore", "Korea"], ["f002", 2, "Singapore", "Korea"]]
 
 
 def sort_waiting_list(waiting_list):
     # Define a custom order for membership status
-    membership_order = {"gold": 1, "silver": 2, "non-member": 3}
+    membership_order = {"gold": 3, "silver": 2, "non-member": 1}
 
     # Sort the waiting list based on membership status
     sorted_waiting_list = sorted(waiting_list, key=lambda x: membership_order[x[0]])
@@ -51,6 +59,7 @@ def add_passenger_to_flight(passenger, flight):
     for key, value in flights.items():
         value["waiting"] = sort_waiting_list(value["waiting"])
 
+    print("\n%s has been added to %s \n" % (passenger.name, flight.flight_no))
     return flights
 
 
@@ -58,7 +67,7 @@ def retrieve_passenger_info(flight):
     key = flights.keys()
     for i in key:
         if i == flight:
-            print(flights[i]["confirmed"])
+            print(flights[i])
 
 
 def assign_seat_from_waiting(flight):
@@ -69,7 +78,8 @@ def assign_seat_from_waiting(flight):
                 if j[0] == flight:
                     if len(flights[flight]["confirmed"]) < j[1]:
                         next_passenger = flights[i]["waiting"].pop()
-                        flights[flight]["confirmed"].append(next_passenger)
+                        flights[flight]["confirmed"].append(next_passenger[1])
+
     return flights
 
 
@@ -82,11 +92,11 @@ def calculate_occupancy_rate():
         if j[0] in flight_key:
             rate = len(flights[j[0]]["confirmed"]) / j[1]
 
-            if rate > highest_rate:
-                highest_rate = rate
-                high_occupancy = [[j[0], highest_rate]]  # Reset the list with a new highest value
-            elif rate == highest_rate:
-                high_occupancy.append([j[0], highest_rate])  # Append if it's equal to the highest value
+        if rate > highest_rate:
+            highest_rate = rate
+            high_occupancy = [[j[0], highest_rate]]  # Reset the list with a new highest value
+        elif rate == highest_rate:
+            high_occupancy.append([j[0], highest_rate])  # Append if it's equal to the highest value
 
     print(high_occupancy)
 
@@ -97,11 +107,11 @@ def remove_Passenger(flight, passenger):
             for x in flights[i]["confirmed"]:
                 if x[0] == passenger:
                     flights[i]["confirmed"].remove(x)
+
     return flights
 
 
 def main():
-
     print("---------FlyHigh airline reservation system-----------\n")
     print("1. Add new passenger to a flight \n")
     print("2. Retrieve information of all the passengers on a flight \n")
@@ -126,19 +136,19 @@ def main():
             flight_split = flight.split(",")
             psg = Passenger(passenger_split[0].strip().lower(), passenger_split[1], passenger_split[2], passenger_split[3].strip().lower())
             flt = Flights(flight_split[0].strip().lower(), int(flight_split[1].strip()), flight_split[2].strip(), flight_split[3].strip())
-            print(add_passenger_to_flight(psg,flt))
+            add_passenger_to_flight(psg,flt)
         elif command == "2":
             inp = input("Which Flight do you want to find: \n")
             retrieve_passenger_info(inp.lower())
         elif command == "3":
             assign_flight = input("Which flight do you want to assign a seat from waiting: \n")
-            print(assign_seat_from_waiting(assign_flight.strip().lower()))
+            assign_seat_from_waiting(assign_flight.strip().lower())
         elif command == "4":
             calculate_occupancy_rate()
         elif command == "5":
             inpt = input("Which flight do you want to amend: \n")
             pasg = input("Which passenger do you want to remove: \n")
-            print(remove_Passenger(inpt.strip().lower(), pasg.strip().lower()))
+            remove_Passenger(inpt.strip().lower(), pasg.strip().lower())
         elif command == "6":
             break
 
