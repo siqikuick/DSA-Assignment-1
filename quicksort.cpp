@@ -49,7 +49,7 @@ void QuickSort(vector<T>& A, int low, int high) {
 
 int main() {
     cout << "Enter the number of values to sort (a positive integer): ";
-    size_t n;
+    int n;
     while (!(cin >> n) || n <= 0) {
         cout << "Please enter a valid positive integer: ";
         cin.clear(); // Clear the error flag.
